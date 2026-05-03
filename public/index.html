@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10G LAN Speed Test</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts for premium typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>10G LAN <span>Speed Test</span></h1>
+            <p>Measure local throughput up to 10 Gbps</p>
+        </header>
+
+        <main class="dashboard">
+            <!-- Gauge Section -->
+            <div class="gauge-container">
+                <svg class="gauge" viewBox="0 0 200 200">
+                    <defs>
+                        <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#00f2fe" />
+                            <stop offset="100%" stop-color="#4facfe" />
+                        </linearGradient>
+                        <filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">
+                            <feGaussianBlur stdDeviation="8" result="blur" />
+                            <feMerge>
+                                <feMergeNode in="blur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+                    <!-- Background arc -->
+                    <path class="gauge-bg" d="M 40 160 A 85 85 0 1 1 160 160" />
+                    <!-- Foreground arc -->
+                    <path class="gauge-progress" d="M 40 160 A 85 85 0 1 1 160 160" filter="url(#neonGlow)" />
+                </svg>
+                <div class="gauge-content">
+                    <div class="speed-value" id="currentSpeed">0.0</div>
+                    <div class="speed-unit" id="currentUnit">Mbps</div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="results">
+                <div class="result-card">
+                    <span class="label">Ping</span>
+                    <div class="value"><span id="pingResult">--</span> <span class="unit">ms</span></div>
+                </div>
+                <div class="result-card">
+                    <span class="label">Download</span>
+                    <div class="value"><span id="downResult">--</span> <span id="downUnit" class="unit">Mbps</span></div>
+                </div>
+                <div class="result-card">
+                    <span class="label">Upload</span>
+                    <div class="value"><span id="upResult">--</span> <span id="upUnit" class="unit">Mbps</span></div>
+                </div>
+            </div>
+
+            <!-- Action Button -->
+            <button id="startBtn" class="glow-button">Start Test</button>
+        </main>
+        
+        <div class="status-indicator" id="statusText">Ready to test</div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
