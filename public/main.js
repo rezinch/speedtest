@@ -166,9 +166,11 @@ async function runUploadTest() {
     const durationMs = 5000; // 5 seconds
     let totalBytes = 0;
     
-    // Generate a 10MB buffer for uploading
+    // Generate a 10MB buffer for uploading with completely random incompressible data
     const chunk = new Uint8Array(10 * 1024 * 1024);
-    for (let i = 0; i < chunk.length; i+=1024) chunk[i] = Math.random() * 255;
+    for (let i = 0; i < chunk.length; i += 65536) {
+        window.crypto.getRandomValues(chunk.subarray(i, i + Math.min(65536, chunk.length - i)));
+    }
 
     const startTime = performance.now();
     let isTesting = true;

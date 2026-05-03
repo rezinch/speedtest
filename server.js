@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const crypto = require('crypto');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -8,11 +9,10 @@ const PORT = process.env.PORT || 3000;
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Pre-allocate a 50MB buffer of random data to avoid CPU overhead during generation
+// We use crypto.randomFillSync to ensure data is completely incompressible.
 const CHUNK_SIZE = 50 * 1024 * 1024; // 50 MB
 const randomDataChunk = Buffer.alloc(CHUNK_SIZE);
-for (let i = 0; i < CHUNK_SIZE; i += 4096) {
-    randomDataChunk.writeUInt32LE(Math.random() * 0xFFFFFFFF >>> 0, i);
-}
+crypto.randomFillSync(randomDataChunk);
 
 // Download endpoint
 app.get('/download', (req, res) => {
@@ -22,8 +22,8 @@ app.get('/download', (req, res) => {
 
     res.setHeader('Content-Type', 'application/octet-stream');
     res.setHeader('Content-Length', size.toString());
-    // Cache control to ensure real network test
-    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    // Cache control to ensure real network test and prevent compression (no-transform)
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, no-transform');
     res.setHeader('Pragma', 'no-cache');
     res.setHeader('Expires', '0');
 
